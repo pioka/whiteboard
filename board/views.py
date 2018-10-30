@@ -4,21 +4,21 @@ from .models import Article
 
 
 # Create your views here.
-def index(request):
+def studentHome(request):
     article_list = Article.objects.filter(archived=False).order_by('-id')
 
     context = {
         'page': 'Home',
         'article_list': article_list
     }
-    return render(request, 'board/index.html', context)
+    return render(request, 'board/home.html', context)
 
 
-def archivedArticles(request):
+def studentArchived(request):
     article_list = Article.objects.filter(archived=True).order_by('-id')
 
     context = {
         'page': 'Archived',
         'article_list': article_list
     }
-    return render(request, 'board/index.html', context)
+    return render(request, 'board/home.html', context)

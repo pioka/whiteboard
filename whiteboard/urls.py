@@ -18,5 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('board.urls')),
+    # DjangoAuthSystem Doc: https://docs.djangoproject.com/ja/2.1/topics/auth/default/
+    path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
 ]
