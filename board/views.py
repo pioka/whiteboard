@@ -8,21 +8,16 @@ def studentHome(request):
     article_list = Article.objects.filter(archived=False).order_by('-id')
 
     context = {
-        'page': 'Home',
-        'article_list': article_list
+        'article_list': article_list,
     }
-    return render(request, 'board/home.html', context)
+    return render(request, 'board/studentHome.html', context)
 
-
-def studentArchived(request):
-    article_list = Article.objects.filter(archived=True).order_by('-id')
-
-    context = {
-        'page': 'Archived',
-        'article_list': article_list
-    }
-    return render(request, 'board/home.html', context)
 
 @login_required
 def teacherHome(request):
-    return render(request, 'board/home.html')
+    article_list = Article.objects.filter(archived=False).order_by('-id')
+
+    context = {
+        'article_list': article_list,
+    }
+    return render(request, 'board/teacherHome.html', context)
