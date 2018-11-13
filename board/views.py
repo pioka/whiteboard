@@ -21,3 +21,7 @@ def teacherHome(request):
         'article_list': article_list,
     }
     return render(request, 'board/teacherHome.html', context)
+
+@login_required
+def teacherCreateArticle(request):
+    return render(request, 'board/teacherCreateArticle.html')
