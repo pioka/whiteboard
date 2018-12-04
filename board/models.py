@@ -38,9 +38,9 @@ class Article(models.Model):
     subject = models.CharField(max_length=255)
     body = models.TextField()
     is_archived = models.BooleanField()
-    updated_at = models.DateTimeField()
+    updated_at = models.DateTimeField(auto_now=True)
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
-    label = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.subject

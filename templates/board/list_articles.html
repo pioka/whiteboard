@@ -1,14 +1,14 @@
 {% extends 'board/base.html' %}
 
-{% block title %} ホーム {% endblock %}
+{% block title %} {{ board.name }} {% endblock %}
 
 {% block content %}
 
-{% if article_list %}
-{% for article in article_list %}
+{% if articles %}
+{% for article in articles %}
 <div class="card mt-3">
     <div class="card-header">
-        {{ article.title }}
+        {{ article.subject }}
     </div>
     <div class="card-body">
         <p class="card-text">

@@ -1,0 +1,17 @@
+{% extends 'board/base.html' %}
+
+{% block title %} 新規作成 {% endblock %}
+
+{% block content %}
+new article
+<form class="mt-4 col-6 offset-3" method="post" action="{{ request.path }}">
+    {% csrf_token %}
+    {% for el in form %}
+    <div class="form-group">
+        {{ el.label_tag }}
+        {{ el }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">作成</button>
+</form>
+{% endblock content %}
