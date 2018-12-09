@@ -20,12 +20,27 @@
                     {{ user.username }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'logout' %}">ログアウト</a>
+                    {% if board.owner == user %}
+                    <a class="dropdown-item" 
+                       href="{% url 'create_article' user.username board.id %}">
+                        おしらせを作成
+                    </a>
+                    <a class="dropdown-item" 
+                       href="#">
+                        _ボード設定
+                    </a>
+                    {% endif %}
+                    <a class="dropdown-item" href="#">_アカウント設定</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item"
+                       href="{% url 'logout' %}">
+                       ログアウト
+                    </a>
                 </div>
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">ログイン</a>
+                <a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">ログイン</a>
             </li>
             {% endif %}
         </ul>

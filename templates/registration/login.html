@@ -13,6 +13,7 @@
         {{ form.password.label_tag }}
         <input class="form-control" type="password" name="password" required="" id="id_password">
     </div>
+    <input name="next" type="hidden" value="{{ next }}"/>
     <button type="submit" class="btn btn-primary">ログイン</button>
 </form>
 {% endblock content %}
