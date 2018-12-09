@@ -22,8 +22,8 @@
                             </span>
                             {% endif %}
                         </div>
-                        <div class="col-4">
-                                <span class="float-right">{{ article.updated_at | date:'Y-m-d H:i' }}</span>
+                        <div class="col-sm-4">
+                                <span class="float-right text-muted">{{ article.updated_at | date:'Y-m-d H:i' }}</span>
                         </div>      
                     </div>
                 </a>
@@ -33,15 +33,23 @@
              data-parent="#accordion"
              aria-labelledby="heading{{ forloop.counter }}">
             <div class="card-body">
-                {{ article.body | linebreaksbr }}
+                <p class="card-text">{{ article.body | linebreaksbr }}</p>
+                {% if board.owner == user %}
+                <a class="card-link btn btn-outline-primary" href="#" role="button" >
+                    _編集
+                </a>
+                <a class="card-link btn btn-outline-secondary" href="#" role="button" >
+                    _非表示
+                </a>
+                {% endif %}
             </div>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
 </div>
 
 {% else %}
-<p class="mt-3">No articles (._.)</p>
+<p class="mt-3">連絡事項はありません。This is fine☕</p>
 {% endif %}
 
 {% endblock content %}
