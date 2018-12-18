@@ -35,8 +35,8 @@
             <div class="card-body">
                 <p class="card-text">{{ article.body | linebreaksbr }}</p>
                 {% if board.owner == user %}
-                <a class="card-link btn btn-outline-primary" href="#" role="button" >
-                    _編集
+                <a class="card-link btn btn-outline-primary" href="{% url 'edit_article' user.username board.id article.id %}" role="button" >
+                    編集
                 </a>
                 <a class="card-link btn btn-outline-secondary" href="#" role="button" >
                     _非表示

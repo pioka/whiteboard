@@ -1,0 +1,17 @@
+{% extends 'board/base.html' %}
+
+{% block title %} 編集 {% endblock %}
+
+{% block content %}
+<h1>'{{article.subject}}'を編集’</h1>
+<form class="mt-4 col-6 offset-3" method="post" action="{{ request.path }}">
+    {% csrf_token %}
+    {% for el in form %}
+    <div class="form-group">
+        {{ el.label_tag }}
+        {{ el }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">変更</button>
+</form>
+{% endblock content %}

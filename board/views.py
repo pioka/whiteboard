@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.models import User
@@ -6,21 +6,6 @@ from django.urls import reverse
 
 from .models import Article, Board, Tag
 from .forms import ArticleForm
-
-
-#### Helpers ####
-def _pick_board(username, board_id):
-    try:
-        owner = User.objects.get(username=username)
-    except User.DoesNotExist:
-        raise Http404('User does not exist')
-
-    try:
-        board = Board.objects.get(id=board_id, owner=owner)
-    except Board.DoesNotExist:
-        raise Http404('Board does not exist')
-
-    return board
 
 
 #### Views ####
@@ -34,9 +19,9 @@ def index(request):
 
 # お知らせをリスト表示
 def list_articles(request, username, board_id):
-    board = _pick_board(username=username, board_id=board_id)
-
-    articles = Article.objects.filter(board_id=board_id).order_by('-id')
+    owner = get_object_or_404(User, username=username)
+    board = get_object_or_404(Board, owner=owner, id=board_id)
+    articles = Article.objects.filter(board=board).order_by('-updated_at')
 
     context = {
         'board': board,
@@ -48,7 +33,8 @@ def list_articles(request, username, board_id):
 
 @login_required
 def create_article(request, username, board_id):
-    board = _pick_board(username=username, board_id=board_id)
+    owner = get_object_or_404(User, username=username)
+    board = get_object_or_404(Board, owner=owner, id=board_id)
 
     if request.method == 'POST':
         form = ArticleForm(request.POST)
@@ -70,3 +56,36 @@ def create_article(request, username, board_id):
         'form': form,
     }
     return render(request, 'board/create_article.html', context)
+
+
+@login_required
+def edit_article(request, username, board_id, article_id):
+    owner = get_object_or_404(User, username=username)
+    board = get_object_or_404(Board, id=board_id, owner=owner)
+    article = get_object_or_404(Article, board=board, id=article_id)
+
+    if request.method == 'POST':
+        form = ArticleForm(request.POST)
+        form.fields['tag'].queryset = Tag.objects.filter(board_id=board_id)
+        if form.is_valid():
+            article.subject = form.cleaned_data['subject']
+            article.body = form.cleaned_data['body']
+            article.tag = form.cleaned_data['tag']
+            article.save()
+            return HttpResponseRedirect(
+                reverse('list_articles', args=[board.owner.username, board.id])
+            )
+    else:
+        form = ArticleForm(initial={
+            'subject': article.subject,
+            'body': article.body,
+            'tag': article.tag
+        })
+        form.fields['tag'].queryset = Tag.objects.filter(board_id=board_id)
+
+    context = {
+        'article': article,
+        'board': board,
+        'form': form,
+    }
+    return render(request, 'board/edit_article.html', context)
