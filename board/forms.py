@@ -1,20 +1,12 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from .models import Article,Tag
+from .models import Article
 
 class ArticleForm(forms.ModelForm):
-    tag = forms.ModelChoiceField(
-        queryset=Tag.objects.none(),
-        widget=forms.Select(attrs={'class': 'form-control'}),
-        label='タグ',
-        empty_label='- 未選択 -',
-        required=False
-    )
-    
     class Meta:
         model = Article
-        fields = ('subject', 'body', 'tag')
+        fields = ('subject', 'body')
         
         labels = {
             'subject': _('タイトル'),
