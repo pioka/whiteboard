@@ -3,7 +3,6 @@
 {% block title %} 新規作成 {% endblock %}
 
 {% block content %}
-<h1>'{{board.name}}'に連絡事項を追加</h1>
 <form class="mt-4 col-6 offset-3" method="post" action="{{ request.path }}">
     {% csrf_token %}
     {% for el in form %}

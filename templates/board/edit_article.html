@@ -3,8 +3,7 @@
 {% block title %} 編集 {% endblock %}
 
 {% block content %}
-<h1>'{{article.subject}}'を編集’</h1>
-<form class="mt-4 col-6 offset-3" method="post" action="{{ request.path }}">
+<form class="mt-1 col-6 offset-3" method="post" action="{{ request.path }}">
     {% csrf_token %}
     {% for el in form %}
     <div class="form-group">

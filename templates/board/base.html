@@ -2,8 +2,8 @@
 
 {% block topbar %}
 <!-- TopBar (Not logged in) -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">WB</a>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: teal">
+    <a class="navbar-brand" href="#">WhiteBoard</a>
     <button class="navbar-toggler" type="button"
     data-toggle="collapse" data-target="#navbarText"
     aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation"
@@ -11,7 +11,13 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav mr-auto"></ul>
+        <ul class="navbar-nav mr-auto">
+            {% if board %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'list_articles' board.owner board.id %}">{{ board.name }}</a>
+            </li>
+        {% endif %}
+        </ul>
         <ul class="navbar-nav">
             {% if user.is_authenticated %}
             <li class="nav-item dropdown">
@@ -23,11 +29,7 @@
                     {% if board.owner == user %}
                     <a class="dropdown-item" 
                        href="{% url 'create_article' user.username board.id %}">
-                        おしらせを作成
-                    </a>
-                    <a class="dropdown-item" 
-                       href="#">
-                        _ボード設定
+                        連絡事項を追加
                     </a>
                     {% endif %}
                     <a class="dropdown-item" href="#">_アカウント設定</a>

@@ -3,17 +3,23 @@
 {% block title %} ログイン {% endblock %}
 
 {% block content %}
-<form class="mt-4 col-6 offset-3" method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <div class="form-group">
-        {{ form.username.label_tag }}
-        <input class="form-control" type="text" name="username" required="" id="id_username" autofocus="">
-    </div>
-    <div class="form-group">
-        {{ form.password.label_tag }}
-        <input class="form-control" type="password" name="password" required="" id="id_password">
-    </div>
-    <input name="next" type="hidden" value="{{ next }}"/>
-    <button type="submit" class="btn btn-primary">ログイン</button>
-</form>
+<nav class="navbar"></nav>
+<div class="card mt-5 col-md-6 offset-md-3">
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="card-body">
+            <h3 class="card-title text-center">WhiteBoard</h3>
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                <input class="form-control" type="text" name="username" required="" id="id_username" autofocus="">
+            </div>
+            <div class="form-group">
+                {{ form.password.label_tag }}
+                <input class="form-control" type="password" name="password" required="" id="id_password">
+            </div>
+            <input name="next" type="hidden" value="{{ next }}"/>
+            <button type="submit" class="btn btn-primary">ログイン</button>
+        </div>
+    </form>
+</div>
 {% endblock content %}
