@@ -21,7 +21,7 @@ def index(request):
 def list_articles(request, username, board_id):
     owner = get_object_or_404(User, username=username)
     board = get_object_or_404(Board, owner=owner, id=board_id)
-    articles = Article.objects.filter(board=board).order_by('-updated_at')
+    articles = Article.objects.filter(board=board, is_archived=False).order_by('-updated_at')
 
     context = {
         'board': board,
@@ -89,3 +89,18 @@ def edit_article(request, username, board_id, article_id):
         'form': form,
     }
     return render(request, 'board/edit_article.html', context)
+
+
+@login_required
+def archive_article(request, username, board_id, article_id):
+    owner = get_object_or_404(User, username=username)
+    board = get_object_or_404(Board, id=board_id, owner=owner)
+    article = get_object_or_404(Article, board=board, id=article_id)
+
+    if request.method == 'POST' and request.user == owner:
+        article.is_archived = True
+        article.save()
+    
+    return HttpResponseRedirect(
+        reverse('list_articles', args=[board.owner.username, board.id])
+    )

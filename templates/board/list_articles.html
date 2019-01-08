@@ -35,12 +35,13 @@
             <div class="card-body">
                 <p class="card-text">{{ article.body | linebreaksbr }}</p>
                 {% if board.owner == user %}
+                <form method="POST" action="{% url 'archive_article' user.username board.id article.id %}">
+                    {% csrf_token %}
                 <a class="card-link btn btn-outline-primary" href="{% url 'edit_article' user.username board.id article.id %}" role="button" >
                     編集
                 </a>
-                <a class="card-link btn btn-outline-secondary" href="#" role="button" >
-                    _非表示
-                </a>
+                <input class="btn btn-primary card-link" type="submit" value="非表示">
+                </form>
                 {% endif %}
             </div>
         </div>
