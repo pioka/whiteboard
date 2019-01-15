@@ -8,7 +8,7 @@
     <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <div class="card-body">
-            <h3 class="card-title text-center">WhiteBoard</h3>
+            <h3 class="card-title text-center">学内掲示板</h3>
             <div class="form-group">
                 {{ form.username.label_tag }}
                 <input class="form-control" type="text" name="username" required="" id="id_username" autofocus="">

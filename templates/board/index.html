@@ -3,7 +3,7 @@
 {% block title %} Index {% endblock %}
 
 {% block content %}
-<h1>WhiteBoard</h1>
+<h1>学内掲示板</h1>
 {% for board in boards %}
 <a href="{% url 'list_articles' board.owner board.id %}">{{ board.name }}</a>
 {% endfor %}

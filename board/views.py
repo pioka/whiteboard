@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
 from .models import Article, Board
@@ -29,6 +30,22 @@ def list_articles(request, username, board_id):
     }
 
     return render(request, 'board/list_articles.html', context)
+
+
+def all_articles(request, username, board_id):
+    owner = get_object_or_404(User, username=username)
+    board = get_object_or_404(Board, owner=owner, id=board_id)
+    article_list = Article.objects.filter(board=board)
+    paginator = Paginator(article_list, 10, orphans=5)
+    page = request.GET.get('page')
+    articles = paginator.get_page(page)
+
+    context = {
+        'board': board,
+        'articles': articles, 
+    }
+
+    return render(request, 'board/all_articles.html', context)
 
 
 @login_required
@@ -86,6 +103,10 @@ def edit_article(request, username, board_id, article_id):
 
 
 @login_required
+def account_settings(request):
+    pass
+
+@login_required
 def archive_article(request, username, board_id, article_id):
     owner = get_object_or_404(User, username=username)
     board = get_object_or_404(Board, id=board_id, owner=owner)
@@ -93,6 +114,21 @@ def archive_article(request, username, board_id, article_id):
 
     if request.method == 'POST' and request.user == owner:
         article.is_archived = True
+        article.save()
+    
+    return HttpResponseRedirect(
+        reverse('list_articles', args=[board.owner.username, board.id])
+    )
+
+
+@login_required
+def restore_article(request, username, board_id, article_id):
+    owner = get_object_or_404(User, username=username)
+    board = get_object_or_404(Board, id=board_id, owner=owner)
+    article = get_object_or_404(Article, board=board, id=article_id)
+
+    if request.method == 'POST' and request.user == owner:
+        article.is_archived = False
         article.save()
     
     return HttpResponseRedirect(
