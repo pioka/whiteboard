@@ -1,6 +1,6 @@
 {% extends 'board/base.html' %}
 
-{% block title %} 新規作成 {% endblock %}
+{% block title %} 連絡事項の追加 {% endblock %}
 
 {% block content %}
 <form class="mt-4 col-6 offset-3" method="post" action="{{ request.path }}">
@@ -11,6 +11,6 @@
         {{ el }}
     </div>
     {% endfor %}
-    <button type="submit" class="btn btn-primary">作成</button>
+    <button type="submit" class="btn btn-primary">追加</button>
 </form>
 {% endblock content %}

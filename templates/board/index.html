@@ -3,8 +3,6 @@
 {% block title %} Index {% endblock %}
 
 {% block content %}
-<h1>学内掲示板</h1>
-{% for board in boards %}
-<a href="{% url 'list_articles' board.owner board.id %}">{{ board.name }}</a>
-{% endfor %}
+<h1>College BBS</h1>
+<p>教員に配布されたURLから掲示板にアクセスしてください。</p>
 {% endblock content %}

@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
 from .models import Article, Board
-from .forms import ArticleForm
+from .forms import ArticleForm, BoardForm
 
 
 #### Views ####
@@ -26,7 +26,8 @@ def list_articles(request, username, board_id):
 
     context = {
         'board': board,
-        'articles': articles, 
+        'articles': articles,
+        'refresh_timer': 60,
     }
 
     return render(request, 'board/list_articles.html', context)
@@ -103,10 +104,6 @@ def edit_article(request, username, board_id, article_id):
 
 
 @login_required
-def account_settings(request):
-    pass
-
-@login_required
 def archive_article(request, username, board_id, article_id):
     owner = get_object_or_404(User, username=username)
     board = get_object_or_404(Board, id=board_id, owner=owner)
@@ -134,3 +131,59 @@ def restore_article(request, username, board_id, article_id):
     return HttpResponseRedirect(
         reverse('list_articles', args=[board.owner.username, board.id])
     )
+
+
+@login_required
+def list_boards(request):
+    user = request.user
+    boards = Board.objects.filter(owner=user)
+
+    context = {
+        'boards': boards,
+    }
+    return render(request, 'board/list_boards.html', context)
+
+
+@login_required
+def create_board(request):
+    if request.method == 'POST':
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            new_board = form.save(commit=False)
+            new_board.owner = request.user
+            new_board = form.save()
+            return HttpResponseRedirect(
+                reverse('list_boards')
+            )
+    else:
+        form = BoardForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'board/create_board.html', context)
+
+
+
+@login_required
+def edit_board(request, board_id):
+    board = get_object_or_404(Board, id=board_id, owner=request.user)
+
+    if request.method == 'POST':
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            board.name = form.cleaned_data['name']
+            board.save()
+            return HttpResponseRedirect(
+                reverse('list_boards')
+            )
+    else:
+        form = BoardForm(initial={
+            'name': board.name,
+        })
+
+    context = {
+        'form': form,
+        'board': board,
+    }
+    return render(request, 'board/edit_board.html', context)

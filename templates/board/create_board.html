@@ -1,9 +1,9 @@
 {% extends 'board/base.html' %}
 
-{% block title %} 連絡事項の編集 {% endblock %}
+{% block title %} ボードの追加 {% endblock %}
 
 {% block content %}
-<form class="mt-1 col-6 offset-3" method="post" action="{{ request.path }}">
+<form class="mt-4 col-6 offset-3" method="post" action="{{ request.path }}">
     {% csrf_token %}
     {% for el in form %}
     <div class="form-group">
@@ -11,6 +11,6 @@
         {{ el }}
     </div>
     {% endfor %}
-    <button type="submit" class="btn btn-primary">変更</button>
+    <button type="submit" class="btn btn-primary">追加</button>
 </form>
 {% endblock content %}

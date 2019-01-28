@@ -4,7 +4,7 @@
 
 {% block content %}
 {% if board.owner == user %}
-<a class="btn btn-primary mb-3" href="{% url 'create_article' user.username board.id %}" role="button">新規作成</a>
+<a class="btn btn-primary mb-3" href="{% url 'create_article' user.username board.id %}" role="button">連絡事項を追加</a>
 {% endif %}
 
 {% if articles %}
