@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
@@ -54,6 +54,9 @@ def create_article(request, username, board_id):
     owner = get_object_or_404(User, username=username)
     board = get_object_or_404(Board, owner=owner, id=board_id)
 
+    if request.user != owner:
+        return HttpResponseForbidden()
+
     if request.method == 'POST':
         form = ArticleForm(request.POST)
         if form.is_valid():
@@ -79,6 +82,9 @@ def edit_article(request, username, board_id, article_id):
     owner = get_object_or_404(User, username=username)
     board = get_object_or_404(Board, id=board_id, owner=owner)
     article = get_object_or_404(Article, board=board, id=article_id)
+
+    if request.user != owner:
+        return HttpResponseForbidden()
 
     if request.method == 'POST':
         form = ArticleForm(request.POST)
@@ -109,6 +115,9 @@ def archive_article(request, username, board_id, article_id):
     board = get_object_or_404(Board, id=board_id, owner=owner)
     article = get_object_or_404(Article, board=board, id=article_id)
 
+    if request.user != owner:
+        return HttpResponseForbidden()
+
     if request.method == 'POST' and request.user == owner:
         article.is_archived = True
         article.save()
@@ -123,6 +132,9 @@ def restore_article(request, username, board_id, article_id):
     owner = get_object_or_404(User, username=username)
     board = get_object_or_404(Board, id=board_id, owner=owner)
     article = get_object_or_404(Article, board=board, id=article_id)
+
+    if request.user != owner:
+        return HttpResponseForbidden()
 
     if request.method == 'POST' and request.user == owner:
         article.is_archived = False
