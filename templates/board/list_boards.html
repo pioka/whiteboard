@@ -1,0 +1,28 @@
+{% extends 'board/base.html' %}
+
+{% block title %} 管理中のボード {% endblock %}
+
+{% block content %}
+<p class="text-danger">ボードの削除操作はできません。希望する場合は管理者に連絡してください。</p>
+<a class="btn btn-primary mb-3" href="{% url 'create_board' %}" role="button" >ボードを追加</a>
+
+{% if boards %}
+{% for board in boards %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ board.name }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{% url 'list_articles' user.username board.id %}</h6>
+        <a class="card-link btn btn-light" href="{% url 'list_articles' user.username board.id %}" role="button" >
+            見る
+        </a>
+        <a class="card-link btn btn-light" href="{% url 'edit_board' board.id %}" role="button" >
+            名前の変更
+        </a>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<p class="mt-3">まだボードがありません。</p>
+{% endif %}
+
+{% endblock content %}

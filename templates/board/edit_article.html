@@ -1,0 +1,16 @@
+{% extends 'board/base.html' %}
+
+{% block title %} 連絡事項の編集 {% endblock %}
+
+{% block content %}
+<form class="mt-1 col-6 offset-3" method="post" action="{{ request.path }}">
+    {% csrf_token %}
+    {% for el in form %}
+    <div class="form-group">
+        {{ el.label_tag }}
+        {{ el }}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">変更</button>
+</form>
+{% endblock content %}
